@@ -85,7 +85,7 @@ fn monochrome<'py>(
 }
 
 #[pymodule]
-fn pepe_addon(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn pepe_hyst(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(monochrome, m)?)?;
     m.add("__doc__", "Monochrome level fix for RGB8 image arrays.")?;
     Ok(())

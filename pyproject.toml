@@ -3,7 +3,7 @@ requires = ["maturin>=1.8,<2.0"]
 build-backend = "maturin"
 
 [project]
-name = "pepe_addon"
+name = "pepe_hyst"
 description = "Monochrome level fix for RGB8 image arrays"
 requires-python = ">=3.9"
 classifiers = [
