@@ -47,7 +47,6 @@ jobs:
         with:
           target: ${{ matrix.target }}
           args: --release --out dist
-          working-directory: pepecore-py-bindings
           container: 'off'
 
       - name: Upload Python wheels
@@ -55,32 +54,31 @@ jobs:
         with:
           if-no-files-found: error
           name: wheels-macos-${{ matrix.target }}
-          path: pepecore-py-bindings/dist
+          path: dist
 
   python-sdist:
     name: Build Python (sdist)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-  
+
       - name: Maturin build (sdist)
         uses: PyO3/maturin-action@v1
         with:
           command: sdist
-          working-directory: pepecore-py-bindings
           args: -o dist
-  
+
       - name: Upload sdist
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: sdist
-          path: pepecore-py-bindings/dist/*.tar.gz
+          path: dist/*.tar.gz
 
   python-linux:
     name: Build Python (Linux)
@@ -90,7 +88,7 @@ jobs:
         target: [ x86_64, x86, aarch64 ]
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -99,7 +97,7 @@ jobs:
             ~/.cargo/registry/cache
             ~/.cargo/git/db
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-  
+
       - name: Cache Cargo build outputs
         uses: actions/cache@v4
         with:
@@ -107,21 +105,20 @@ jobs:
           key: ${{ runner.os }}-cargo-target-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-target-${{ matrix.target }}-
-  
+
       - name: Maturin build (wheels)
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
           args: --release --out dist
-          working-directory: pepecore-py-bindings
           manylinux: 'auto'
-  
+
       - name: Upload Python wheels
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: wheels-linux-${{ matrix.target }}
-          path: pepecore-py-bindings/dist/*.whl
+          path: dist/*.whl
 
   python-windows:
     name: Build Python (Windows)
@@ -160,14 +157,13 @@ jobs:
         with:
           target: ${{ matrix.target }}
           args: --release --out dist
-          working-directory: pepecore-py-bindings
 
       - name: Upload Python wheels
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: wheels-windows-${{ matrix.target }}
-          path: pepecore-py-bindings/dist
+          path: dist
 
   python-pypi-upload:
     name: Upload to PyPI
